@@ -6,20 +6,29 @@ import iconDice from '../../../public/images/icon-dice.svg';
 import patternDividerDesktop from '../../../public/images/pattern-divider-desktop.svg';
 import patternDividerMobile from '../../../public/images/pattern-divider-mobile.svg';
 import { fetchQuote } from '../lib/actions';
+import Loader from './Loader';
 
 const Card = () => {
 	const [advice, setAdvice] = useState({
 		id: 0,
 		advice: '',
 	});
+	const [loading, setLoading] = useState(false);
 
 	const callQuote = async () => {
-		const response = await fetchQuote();
-		setAdvice(response);
+		try {
+			setLoading(true);
+			const response = await fetchQuote();
+			setAdvice(response);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false);
+		}
 	};
+
 	const handleClick = async () => {
-		const response = await fetchQuote();
-		setAdvice(response);
+		await callQuote();
 	};
 
 	useEffect(() => {
@@ -29,9 +38,15 @@ const Card = () => {
 	return (
 		<section className="relative bg-darkgrayishblue p-8 pb-16 rounded-md flex flex-col items-center gap-6 w-full md:max-w-96">
 			<p className="text-neonGreen text-lg">ADVICE {advice.id}</p>
-			<h2 className="text-2xl text-lightCyan text-center font-bold">
-				&quot;{advice.advice}&quot;
-			</h2>
+
+			{loading ? (
+				<Loader />
+			) : (
+				<h2 className="text-2xl text-lightCyan text-center font-bold">
+					&quot;{advice.advice}&quot;
+				</h2>
+			)}
+
 			<Image
 				alt="pattern divider"
 				src={patternDividerDesktop}
@@ -42,6 +57,7 @@ const Card = () => {
 				src={patternDividerMobile}
 				className="md:hidden"
 			/>
+
 			<div
 				onClick={() => {
 					handleClick();
