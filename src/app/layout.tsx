@@ -6,7 +6,8 @@ const manrope = Manrope({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
 	title: 'Advice Generator',
-	description: 'An app built with Next.js and Tailwind CSS',
+	description:
+		'An app built with Next.js and Tailwind CSS hosted on Vercel that generates random advice.',
 };
 
 export default function RootLayout({
